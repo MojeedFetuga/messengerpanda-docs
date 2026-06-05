@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MessengerPanda Affiliate Toolkit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --panda-blue: #1A73E8;
+    --panda-dark: #0D1B2E;
+    --panda-navy: #1E2B3C;
+    --panda-mid: #2D4A6E;
+    --panda-accent: #F59E0B;
+    --panda-green: #10B981;
+    --panda-light-blue: #EBF3FD;
+    --panda-light-amber: #FEF3C7;
+    --text-main: #0D1B2E;
+    --text-muted: #64748B;
+    --text-light: #94A3B8;
+    --border: #E2E8F0;
+    --surface: #F8FAFC;
+    --white: #FFFFFF;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --font: 'Sora', sans-serif;
+    --mono: 'DM Mono', monospace;
+  }
+
+  body {
+    font-family: var(--font);
+    color: var(--text-main);
+    background: var(--white);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    background: var(--panda-dark);
+    padding: 72px 48px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(26,115,232,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: -60px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(245,158,11,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(26,115,232,0.15);
+    border: 1px solid rgba(26,115,232,0.3);
+    border-radius: 100px;
+    padding: 6px 14px;
+    font-size: 12px; font-weight: 500; letter-spacing: 0.06em;
+    color: #93C5FD;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  .hero-badge::before { content: '🐼'; font-size: 14px; }
+  .hero h1 {
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.15;
+    margin-bottom: 16px;
+    max-width: 640px;
+  }
+  .hero h1 span { color: #60A5FA; }
+  .hero p {
+    font-size: 17px;
+    color: #94A3B8;
+    max-width: 560px;
+    margin-bottom: 36px;
+    line-height: 1.7;
+  }
+  .hero-stats {
+    display: flex; gap: 40px; flex-wrap: wrap;
+  }
+  .hero-stat-val {
+    font-size: 32px; font-weight: 700; color: var(--white);
+    line-height: 1;
+  }
+  .hero-stat-val span { color: var(--panda-accent); }
+  .hero-stat-label {
+    font-size: 13px; color: #64748B; margin-top: 4px;
+  }
+
+  /* ─── NAV ─── */
+  .section-nav {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 0 48px;
+    display: flex; gap: 0;
+    overflow-x: auto;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .nav-tab {
+    padding: 16px 20px;
+    font-size: 13px; font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: all 0.15s;
+    background: none; border-top: none; border-left: none; border-right: none;
+    font-family: var(--font);
+  }
+  .nav-tab:hover { color: var(--panda-blue); }
+  .nav-tab.active { color: var(--panda-blue); border-bottom-color: var(--panda-blue); }
+
+  /* ─── SECTIONS ─── */
+  .section { display: none; padding: 48px; max-width: 860px; margin: 0 auto; }
+  .section.active { display: block; }
+
+  .section-title {
+    font-size: 22px; font-weight: 600;
+    color: var(--text-main);
+    margin-bottom: 8px;
+  }
+  .section-subtitle {
+    font-size: 15px; color: var(--text-muted);
+    margin-bottom: 32px;
+    line-height: 1.6;
+  }
+
+  /* ─── CALCULATOR ─── */
+  .calc-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px;
+    margin-bottom: 24px;
+  }
+  .calc-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+    margin-bottom: 24px;
+  }
+  .calc-field label {
+    display: block;
+    font-size: 12px; font-weight: 600; letter-spacing: 0.05em;
+    text-transform: uppercase; color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+  .calc-field input[type="range"] {
+    width: 100%; accent-color: var(--panda-blue);
+    height: 4px;
+  }
+  .calc-field .range-val {
+    font-size: 22px; font-weight: 600; color: var(--panda-blue);
+    margin-bottom: 6px;
+    font-family: var(--mono);
+  }
+  .results-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+    margin-top: 24px;
+  }
+  .result-box {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 20px 16px;
+    text-align: center;
+  }
+  .result-box.highlight {
+    background: var(--panda-dark);
+    border-color: var(--panda-dark);
+  }
+  .result-box .val {
+    font-size: 26px; font-weight: 700;
+    font-family: var(--mono);
+    color: var(--panda-blue);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .result-box.highlight .val { color: var(--panda-accent); }
+  .result-box .lbl {
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.05em; color: var(--text-muted);
+  }
+  .result-box.highlight .lbl { color: #64748B; }
+
+  /* ─── COPY CARDS ─── */
+  .copy-grid { display: grid; gap: 20px; }
+  .copy-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .copy-card-header {
+    padding: 14px 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .copy-card-platform {
+    font-size: 12px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .platform-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+  }
+  .copy-btn {
+    font-size: 12px; font-weight: 500;
+    color: var(--panda-blue);
+    background: none; border: 1px solid var(--border);
+    border-radius: 6px; padding: 5px 12px;
+    cursor: pointer; font-family: var(--font);
+    transition: all 0.15s;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .copy-btn:hover { background: var(--panda-light-blue); }
+  .copy-btn.copied { color: var(--panda-green); border-color: var(--panda-green); }
+  .copy-card-body {
+    padding: 20px;
+    font-size: 14px; line-height: 1.75;
+    color: var(--text-main);
+    white-space: pre-wrap;
+    font-family: var(--font);
+  }
+  .copy-card-body .placeholder {
+    background: var(--panda-light-amber);
+    color: #92400E;
+    padding: 1px 5px; border-radius: 4px;
+    font-family: var(--mono); font-size: 13px;
+  }
+
+  /* ─── SUBJECT LINES ─── */
+  .subj-list { display: grid; gap: 10px; }
+  .subj-item {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+  }
+  .subj-text { font-size: 14px; color: var(--text-main); flex: 1; line-height: 1.5; }
+  .subj-tag {
+    font-size: 10px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.05em; padding: 3px 8px; border-radius: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .tag-welcome { background: #DBEAFE; color: #1E40AF; }
+  .tag-sales { background: #FEF3C7; color: #92400E; }
+  .tag-affiliate { background: #D1FAE5; color: #065F46; }
+
+  /* ─── FAQ ─── */
+  .faq-list { display: grid; gap: 12px; }
+  .faq-item {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+  }
+  .faq-q {
+    padding: 16px 20px;
+    font-size: 14px; font-weight: 500;
+    cursor: pointer; user-select: none;
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 12px;
+    background: var(--white);
+    transition: background 0.15s;
+  }
+  .faq-q:hover { background: var(--surface); }
+  .faq-chevron { color: var(--text-muted); transition: transform 0.2s; font-size: 16px; flex-shrink: 0; }
+  .faq-item.open .faq-chevron { transform: rotate(180deg); }
+  .faq-a {
+    display: none;
+    padding: 0 20px 16px;
+    font-size: 14px; color: var(--text-muted);
+    line-height: 1.7;
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+  }
+  .faq-item.open .faq-a { display: block; padding-top: 14px; }
+
+  /* ─── CHECKLIST ─── */
+  .checklist { display: grid; gap: 10px; }
+  .check-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 14px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .check-item:hover { background: #EFF6FF; border-color: #BFDBFE; }
+  .check-item.done { background: #F0FDF4; border-color: #BBF7D0; }
+  .check-box {
+    width: 20px; height: 20px;
+    border: 2px solid var(--border);
+    border-radius: 5px; flex-shrink: 0;
+    margin-top: 1px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+    background: var(--white);
+  }
+  .check-item.done .check-box {
+    background: var(--panda-green); border-color: var(--panda-green);
+    color: white; font-size: 12px;
+  }
+  .check-item.done .check-box::after { content: '✓'; color: white; font-size: 12px; font-weight: 700; }
+  .check-label { font-size: 14px; color: var(--text-main); line-height: 1.5; }
+  .check-item.done .check-label { color: var(--text-muted); text-decoration: line-through; }
+  .check-sub { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
+
+  .progress-bar-wrap {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 100px; height: 8px;
+    margin-bottom: 8px; overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%; background: var(--panda-green);
+    border-radius: 100px; transition: width 0.3s;
+  }
+  .progress-label {
+    font-size: 12px; color: var(--text-muted);
+    margin-bottom: 20px;
+  }
+
+  /* ─── PLAN GRID ─── */
+  .plan-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 32px; }
+  .plan-card {
+    border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 20px; background: var(--white);
+  }
+  .plan-card.featured { border: 2px solid var(--panda-blue); }
+  .plan-badge {
+    font-size: 10px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.06em; padding: 3px 8px; border-radius: 4px;
+    margin-bottom: 10px; display: inline-block;
+  }
+  .plan-name { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+  .plan-price { font-size: 24px; font-weight: 700; color: var(--panda-blue); font-family: var(--mono); margin-bottom: 2px; }
+  .plan-ngn { font-size: 12px; color: var(--text-muted); margin-bottom: 12px; }
+  .plan-commission {
+    background: #ECFDF5; border: 1px solid #BBF7D0;
+    border-radius: var(--radius-sm); padding: 10px 12px;
+    font-size: 13px; color: #065F46; font-weight: 500;
+    margin-top: 12px;
+  }
+  .plan-commission strong { font-size: 16px; font-family: var(--mono); }
+
+  /* ─── UTILITIES ─── */
+  .tag-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+  .tag {
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.05em; padding: 4px 10px;
+    border-radius: 100px; border: 1px solid;
+    cursor: pointer; transition: all 0.15s; font-family: var(--font);
+    background: none;
+  }
+  .tag:hover, .tag.active { background: var(--panda-blue); color: white; border-color: var(--panda-blue); }
+  .tag:not(.active) { color: var(--text-muted); border-color: var(--border); }
+
+  .tip-box {
+    background: var(--panda-light-blue);
+    border-left: 3px solid var(--panda-blue);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 14px 18px; margin-top: 20px;
+    font-size: 13px; color: #1E40AF; line-height: 1.6;
+  }
+  .tip-box strong { color: #1E3A8A; }
+
+  .divider { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+  .link-row {
+    display: flex; align-items: center; gap: 12px;
+    background: var(--panda-dark); border-radius: var(--radius-sm);
+    padding: 14px 18px; margin-bottom: 20px;
+  }
+  .link-input {
+    flex: 1; background: none; border: none; outline: none;
+    font-family: var(--mono); font-size: 13px; color: #60A5FA;
+    cursor: text;
+  }
+  .link-copy-btn {
+    background: var(--panda-blue); color: white;
+    border: none; border-radius: 6px; padding: 7px 14px;
+    font-size: 12px; font-weight: 600; cursor: pointer;
+    font-family: var(--font); transition: opacity 0.15s;
+  }
+  .link-copy-btn:hover { opacity: 0.85; }
+
+  /* responsive */
+  @media (max-width: 640px) {
+    .hero { padding: 48px 24px 40px; }
+    .section { padding: 32px 24px; }
+    .section-nav { padding: 0 24px; }
+    .calc-row { grid-template-columns: 1fr; }
+    .results-grid { grid-template-columns: 1fr; }
+    .plan-grid { grid-template-columns: 1fr; }
+    .hero-stats { gap: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">Affiliate Partner Toolkit</div>
+  <h1>Everything you need to<br><span>earn with MessengerPanda</span></h1>
+  <p>Templates, earnings calculator, subject lines, and a launch checklist — all in one place. Share your link, earn 30% per referred customer.</p>
+  <div class="hero-stats">
+    <div>
+      <div class="hero-stat-val"><span>30%</span></div>
+      <div class="hero-stat-label">Commission per referral</div>
+    </div>
+    <div>
+      <div class="hero-stat-val"><span>$5.70</span></div>
+      <div class="hero-stat-label">Per Pro plan referral</div>
+    </div>
+    <div>
+      <div class="hero-stat-val"><span>$14.70</span></div>
+      <div class="hero-stat-label">Per Business plan referral</div>
+    </div>
+    <div>
+      <div class="hero-stat-val">Free</div>
+      <div class="hero-stat-label">To join the program</div>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="section-nav" role="navigation" aria-label="Toolkit sections">
+  <button class="nav-tab active" onclick="switchTab('calculator', this)">Earnings Calculator</button>
+  <button class="nav-tab" onclick="switchTab('plans', this)">Commission Plans</button>
+  <button class="nav-tab" onclick="switchTab('copy', this)">Copy Templates</button>
+  <button class="nav-tab" onclick="switchTab('subjects', this)">Subject Lines</button>
+  <button class="nav-tab" onclick="switchTab('checklist', this)">Launch Checklist</button>
+  <button class="nav-tab" onclick="switchTab('faq', this)">FAQ</button>
+</nav>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- CALCULATOR -->
+<!-- ═══════════════════════════════════════════ -->
+<section id="calculator" class="section active" aria-labelledby="calc-title">
+  <h2 class="section-title" id="calc-title">Earnings Calculator</h2>
+  <p class="section-subtitle">Estimate your monthly and annual earnings based on how many customers you refer.</p>
+
+  <div class="calc-card">
+    <div class="calc-row">
+      <div class="calc-field">
+        <label>Pro Plan Referrals / month</label>
+        <div class="range-val" id="pro-val">5</div>
+        <input type="range" min="0" max="50" value="5" step="1" id="pro-range" oninput="calcEarnings()">
+      </div>
+      <div class="calc-field">
+        <label>Business Plan Referrals / month</label>
+        <div class="range-val" id="biz-val">2</div>
+        <input type="range" min="0" max="20" value="2" step="1" id="biz-range" oninput="calcEarnings()">
+      </div>
+    </div>
+
+    <div class="results-grid">
+      <div class="result-box">
+        <div class="val" id="monthly-earn">$57.90</div>
+        <div class="lbl">Monthly earnings</div>
+      </div>
+      <div class="result-box">
+        <div class="val" id="annual-earn">$694.80</div>
+        <div class="lbl">Annual earnings</div>
+      </div>
+      <div class="result-box highlight">
+        <div class="val" id="lifetime-earn">$694.80</div>
+        <div class="lbl">Estimated total (12 mo)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip-box">
+    <strong>How commission works:</strong> You earn 30% on each customer's payment — one-time per referred customer. Pro = $19 × 30% = <strong>$5.70</strong>. Business = $49 × 30% = <strong>$14.70</strong>. The more consistently you share, the faster earnings accumulate.
+  </div>
+
+  <hr class="divider">
+
+  <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 12px;">Your Referral Link</h3>
+  <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 14px;">Replace <code style="background: var(--surface); padding: 2px 6px; border-radius: 4px; font-size: 12px;">[your-username]</code> with your actual MessengerPanda username to generate your link.</p>
+  <div class="link-row">
+    <input class="link-input" id="reflink" value="https://messengerpanda.app/?ref=[your-username]" readonly>
+    <button class="link-copy-btn" onclick="copyLink()">Copy Link</button>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PLANS -->
+<!-- ═══════════════════════════════════════════ -->
+<section id="plans" class="section" aria-labelledby="plans-title">
+  <h2 class="section-title" id="plans-title">What You're Promoting</h2>
+  <p class="section-subtitle">Three plans — each with a compelling value proposition. Know the pitch for each.</p>
+
+  <div class="plan-grid">
+    <div class="plan-card">
+      <div class="plan-badge" style="background: #F1F5F9; color: #475569;">Free Plan</div>
+      <div class="plan-name">Free</div>
+      <div class="plan-price">$0</div>
+      <div class="plan-ngn">Forever free</div>
+      <ul style="font-size: 13px; color: var(--text-muted); line-height: 1.8; padding-left: 16px;">
+        <li>500 contacts</li>
+        <li>3 campaigns/month</li>
+        <li>1,500 emails/month</li>
+        <li>1 SMTP account</li>
+        <li>Analytics dashboard</li>
+      </ul>
+      <div class="plan-commission">
+        No commission on free signups — but it's your foot in the door to convert them to paid.
+      </div>
+    </div>
+    <div class="plan-card featured">
+      <div class="plan-badge" style="background: #DBEAFE; color: #1E40AF;">⭐ Most Popular</div>
+      <div class="plan-name">Pro</div>
+      <div class="plan-price">$19<span style="font-size: 14px; font-weight: 400; color: var(--text-muted)">/mo</span></div>
+      <div class="plan-ngn">₦15,000/mo via Paystack</div>
+      <ul style="font-size: 13px; color: var(--text-muted); line-height: 1.8; padding-left: 16px;">
+        <li>10,000 contacts</li>
+        <li>Unlimited campaigns</li>
+        <li>50,000 emails/month</li>
+        <li>Drip automations</li>
+        <li>A/B testing</li>
+        <li>Spam checker + DNS tools</li>
+      </ul>
+      <div class="plan-commission">
+        You earn: <strong>$5.70</strong> per referral
+      </div>
+    </div>
+    <div class="plan-card">
+      <div class="plan-badge" style="background: #FEF3C7; color: #92400E;">Business</div>
+      <div class="plan-name">Business</div>
+      <div class="plan-price">$49<span style="font-size: 14px; font-weight: 400; color: var(--text-muted)">/mo</span></div>
+      <div class="plan-ngn">₦40,000/mo via Paystack</div>
+      <ul style="font-size: 13px; color: var(--text-muted); line-height: 1.8; padding-left: 16px;">
+        <li>50,000 contacts</li>
+        <li>Unlimited campaigns</li>
+        <li>250,000 emails/month</li>
+        <li>Multi-SMTP routing</li>
+        <li>Custom branding</li>
+        <li>Dedicated support</li>
+      </ul>
+      <div class="plan-commission">
+        You earn: <strong>$14.70</strong> per referral
+      </div>
+    </div>
+  </div>
+
+  <h3 style="font-size: 15px; font-weight: 600; margin-bottom: 16px; margin-top: 32px;">Who to Target</h3>
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+    <div style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px;">
+      <div style="font-size: 13px; font-weight: 600; margin-bottom: 6px;">🛒 E-commerce store owners</div>
+      <div style="font-size: 12px; color: var(--text-muted); line-height: 1.6;">Growing contact lists fast. Mailchimp's per-subscriber model hurts them most. Strong fit for Pro/Business.</div>
+    </div>
+    <div style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px;">
+      <div style="font-size: 13px; font-weight: 600; margin-bottom: 6px;">📚 Coaches & course creators</div>
+      <div style="font-size: 12px; color: var(--text-muted); line-height: 1.6;">Run newsletters and drip sequences. Usually paying more than they should. Strong Pro fit.</div>
+    </div>
+    <div style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px;">
+      <div style="font-size: 13px; font-weight: 600; margin-bottom: 6px;">🏢 Digital agencies</div>
+      <div style="font-size: 12px; color: var(--text-muted); line-height: 1.6;">Manage email for multiple clients. Multi-SMTP routing and Business plan are a natural fit.</div>
+    </div>
+    <div style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px;">
+      <div style="font-size: 13px; font-weight: 600; margin-bottom: 6px;">🇳🇬 Nigerian businesses</div>
+      <div style="font-size: 12px; color: var(--text-muted); line-height: 1.6;">₦ Naira billing via Paystack is a major differentiator. No USD card needed. Strong local advantage.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- COPY TEMPLATES -->
+<!-- ═══════════════════════════════════════════ -->
+<section id="copy" class="section" aria-labelledby="copy-title">
+  <h2 class="section-title" id="copy-title">Copy Templates</h2>
+  <p class="section-subtitle">Ready-to-use messages for every channel. Swap in your referral link where you see <span style="background: var(--panda-light-amber); color: #92400E; padding: 1px 5px; border-radius: 4px; font-family: var(--mono); font-size: 12px;">[YOUR LINK]</span> and go.</p>
+
+  <div class="tag-row">
+    <button class="tag active" onclick="filterCopy('all', this)">All</button>
+    <button class="tag" onclick="filterCopy('linkedin', this)">LinkedIn</button>
+    <button class="tag" onclick="filterCopy('twitter', this)">Twitter / X</button>
+    <button class="tag" onclick="filterCopy('whatsapp', this)">WhatsApp / DM</button>
+    <button class="tag" onclick="filterCopy('email', this)">Email</button>
+    <button class="tag" onclick="filterCopy('reddit', this)">Reddit</button>
+  </div>
+
+  <div class="copy-grid" id="copy-grid"></div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SUBJECT LINES -->
+<!-- ═══════════════════════════════════════════ -->
+<section id="subjects" class="section" aria-labelledby="subj-title">
+  <h2 class="section-title" id="subj-title">Subject Line Swipe File</h2>
+  <p class="section-subtitle">21 proven subject lines across welcome, sales, and affiliate campaigns. Click any to copy.</p>
+
+  <h3 style="font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 12px;">Welcome & Onboarding</h3>
+  <div class="subj-list" id="subj-welcome"></div>
+
+  <h3 style="font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin: 24px 0 12px;">Sales Funnel</h3>
+  <div class="subj-list" id="subj-sales"></div>
+
+  <h3 style="font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin: 24px 0 12px;">Affiliate Promotion</h3>
+  <div class="subj-list" id="subj-affiliate"></div>
+
+  <div class="tip-box" style="margin-top: 28px;">
+    <strong>A/B test tip:</strong> Use MessengerPanda's built-in A/B testing (Pro feature) to automatically test two subject lines. Send each to 20% of your list, then automatically deliver the winner to the remaining 60%.
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- CHECKLIST -->
+<!-- ═══════════════════════════════════════════ -->
+<section id="checklist" class="section" aria-labelledby="check-title">
+  <h2 class="section-title" id="check-title">Affiliate Launch Checklist</h2>
+  <p class="section-subtitle">Everything you need to do before your first share. Click each item to mark it done.</p>
+
+  <div class="progress-bar-wrap"><div class="progress-bar" id="progress-bar" style="width: 0%"></div></div>
+  <div class="progress-label" id="progress-label">0 of 12 tasks complete</div>
+
+  <div class="checklist" id="checklist-items"></div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- FAQ -->
+<!-- ═══════════════════════════════════════════ -->
+<section id="faq" class="section" aria-labelledby="faq-title">
+  <h2 class="section-title" id="faq-title">Frequently Asked Questions</h2>
+  <p class="section-subtitle">Questions you'll get from potential referrals — and how to answer them confidently.</p>
+  <div class="faq-list" id="faq-list"></div>
+</section>
+
+<script>
+// ─── TAB SWITCHING ───
+function switchTab(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ─── CALCULATOR ───
+function calcEarnings() {
+  const pro = parseInt(document.getElementById('pro-range').value);
+  const biz = parseInt(document.getElementById('biz-range').value);
+  document.getElementById('pro-val').textContent = pro;
+  document.getElementById('biz-val').textContent = biz;
+  const monthly = (pro * 5.70) + (biz * 14.70);
+  const annual = monthly * 12;
+  document.getElementById('monthly-earn').textContent = '$' + monthly.toFixed(2);
+  document.getElementById('annual-earn').textContent = '$' + annual.toFixed(2);
+  document.getElementById('lifetime-earn').textContent = '$' + annual.toFixed(2);
+}
+
+function copyLink() {
+  const val = document.getElementById('reflink').value;
+  navigator.clipboard.writeText(val).catch(() => {});
+  const btn = document.querySelector('.link-copy-btn');
+  btn.textContent = 'Copied!';
+  setTimeout(() => btn.textContent = 'Copy Link', 2000);
+}
+
+// ─── COPY TEMPLATES ───
+const copyTemplates = [
+  {
+    platform: 'LinkedIn', category: 'linkedin', color: '#0077B5',
+    title: 'The Savings Post',
+    body: `If you're paying Mailchimp or Klaviyo by the subscriber, you're leaving money on the table.
+
+At 10,000 subscribers:
+→ Mailchimp Essentials: $135/mo
+→ Klaviyo: $150/mo
+→ MessengerPanda + Brevo: $44/mo
+
+The difference? MessengerPanda charges a flat rate and you bring your own SMTP provider. Enterprise automations, A/B testing, analytics, drip sequences — all included.
+
+Free plan available. No credit card required.
+
+[YOUR LINK]`
+  },
+  {
+    platform: 'LinkedIn', category: 'linkedin', color: '#0077B5',
+    title: 'The BYOS Explainer',
+    body: `Most email platforms charge per subscriber because that's how they scale their revenue — against you.
+
+MessengerPanda flips the model.
+
+→ Flat rate for the platform ($19/mo for Pro)
+→ You connect your own SMTP (Brevo, AWS SES, Resend)
+→ You pay your SMTP provider directly at their rates
+→ Your list can grow without your costs exploding
+
+I've been using it for my email marketing. Setup took under 2 minutes.
+
+Worth checking out 👇
+[YOUR LINK]`
+  },
+  {
+    platform: 'Twitter / X', category: 'twitter', color: '#000000',
+    title: 'The Thread Opener',
+    body: `Most email platforms charge per subscriber.
+
+Here's why that's a terrible deal — and what I switched to instead 🧵
+
+1/ At 10k contacts, Mailchimp charges $135/mo. Klaviyo $150/mo. You're paying for their infrastructure AND their profit margin on your list size.
+
+2/ MessengerPanda separates the platform from the sending. You pay $19/mo for the platform and connect your own SMTP (Brevo is free for 300/day).
+
+3/ The result: same features (automations, analytics, A/B testing) for a fraction of the price. At 10k contacts, you save $91/mo. That's $1,092/year.
+
+Try it free 👇 [YOUR LINK]`
+  },
+  {
+    platform: 'Twitter / X', category: 'twitter', color: '#000000',
+    title: 'The One-Liner',
+    body: `PSA for anyone paying Mailchimp $100+ a month:
+
+MessengerPanda does the same thing for $19/mo flat.
+
+Automations, analytics, A/B testing, SMTP routing — all included.
+
+Free plan: [YOUR LINK]`
+  },
+  {
+    platform: 'WhatsApp / DM', category: 'whatsapp', color: '#25D366',
+    title: 'The Casual Intro',
+    body: `Hey [Name], thought of you.
+
+I've been using this email marketing tool called MessengerPanda — charges a flat $19/mo instead of the per-subscriber model that makes Mailchimp so expensive.
+
+Works with Brevo, AWS SES, Resend. Free plan available.
+
+Figured you might want to check it out: [YOUR LINK]`
+  },
+  {
+    platform: 'WhatsApp / DM', category: 'whatsapp', color: '#25D366',
+    title: 'The Direct Question',
+    body: `Quick question — what are you currently using for email marketing?
+
+If it's Mailchimp, ConvertKit, or anything that charges by the subscriber, I found something way cheaper with the same features.
+
+MessengerPanda — flat $19/mo, bring your own SMTP. I'm saving about $90/mo compared to what I was paying before.
+
+Here's the link if you want to have a look: [YOUR LINK]`
+  },
+  {
+    platform: 'Email', category: 'email',  color: '#EA4335',
+    title: 'Cold Outreach to Marketers',
+    body: `Subject: Are you still paying per subscriber for email marketing?
+
+Hi [First Name],
+
+I noticed you're running email campaigns for [Company]. Quick question — have you looked at MessengerPanda?
+
+It's a flat-rate email platform ($19/mo) where you bring your own SMTP provider. Same features as Mailchimp or Klaviyo (automations, A/B testing, analytics, segmentation) — but the pricing doesn't scale against you as your list grows.
+
+At 10k subscribers, that's typically $91–$106/month in savings.
+
+Free plan to get started, no credit card required: [YOUR LINK]
+
+Worth a look?
+
+[Your name]`
+  },
+  {
+    platform: 'Email', category: 'email', color: '#EA4335',
+    title: 'Newsletter Mention',
+    body: `[Insert into existing newsletter as a section]
+
+---
+💌 Tool I've been using: MessengerPanda
+
+If your email marketing bill has been creeping up as your list grows, check this out. MessengerPanda charges a flat monthly rate ($19/mo for Pro) instead of charging per subscriber. You connect your own SMTP provider (Brevo, AWS SES, Resend) and scale without the penalty.
+
+I've found it cheaper and feature-comparable to Mailchimp and Klaviyo.
+
+Try the free plan → [YOUR LINK]
+---`
+  },
+  {
+    platform: 'Reddit', category: 'reddit', color: '#FF4500',
+    title: 'r/SaaS / r/Entrepreneur Comment',
+    body: `Not sure if this fits what you're looking for, but I've been using MessengerPanda as a flat-rate Mailchimp alternative and it's been solid.
+
+The main difference: instead of charging per subscriber, they charge a flat $19/mo for the platform and you bring your own SMTP (I use Brevo's free tier). So your costs don't explode as your list grows.
+
+Features are comparable — automations, A/B testing, analytics, segmentation. There's a free plan too.
+
+[YOUR LINK] — no affiliation, just found it genuinely useful.`
+  },
+  {
+    platform: 'Reddit', category: 'reddit', color: '#FF4500',
+    title: 'r/EmailMarketing Thread Reply',
+    body: `Worth looking at MessengerPanda if cost is the issue. It's a BYOS (Bring Your Own SMTP) model — you pay a flat rate for the platform ($19/mo Pro) and plug in your own SMTP provider. Brevo has a free tier that covers 300 sends/day, so the total cost can be really low.
+
+At 10k subscribers, the math vs. Mailchimp works out to saving ~$91/mo. The savings calculator on their site makes it easy to see: [YOUR LINK]`
+  },
+];
+
+function renderCopyTemplates(filter = 'all') {
+  const grid = document.getElementById('copy-grid');
+  const filtered = filter === 'all' ? copyTemplates : copyTemplates.filter(t => t.category === filter);
+  grid.innerHTML = filtered.map((t, i) => `
+    <div class="copy-card" data-cat="${t.category}">
+      <div class="copy-card-header">
+        <div class="copy-card-platform">
+          <span class="platform-dot" style="background: ${t.color}"></span>
+          ${t.platform} — ${t.title}
+        </div>
+        <button class="copy-btn" id="copybtn-${i}" onclick="copyTemplate(${i}, '${filter}')">
+          Copy
+        </button>
+      </div>
+      <div class="copy-card-body">${t.body.replace(/\[YOUR LINK\]/g, '<span class="placeholder">[YOUR LINK]</span>')}</div>
+    </div>
+  `).join('');
+}
+
+function copyTemplate(idx, filter) {
+  const filtered = filter === 'all' ? copyTemplates : copyTemplates.filter(t => t.category === filter);
+  navigator.clipboard.writeText(filtered[idx].body).catch(() => {});
+  const btn = document.getElementById(`copybtn-${idx}`);
+  if (btn) { btn.textContent = 'Copied!'; btn.classList.add('copied'); setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000); }
+}
+
+function filterCopy(cat, btn) {
+  document.querySelectorAll('.tag-row .tag').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  renderCopyTemplates(cat);
+}
+
+// ─── SUBJECT LINES ───
+const subjects = {
+  welcome: [
+    "Welcome to MessengerPanda — your flat-rate email engine is ready 🐼",
+    "Two minutes to your first campaign",
+    "Send your first campaign in 10 minutes [quick guide]",
+    "Your SMTP is the missing piece — here's how to connect it",
+    "Quick check-in from the founder (2 weeks in)",
+  ],
+  sales: [
+    "The real reason email marketing is so expensive (and the fix)",
+    "What $19 gets you in email marketing [comparison]",
+    "How [Business Name] saves $1,092/year switching to MessengerPanda",
+    "\"I don't want to deal with SMTP setup\" — fair. Here's the truth.",
+    "One last thing before I stop nudging you 😄",
+    "Stop paying per subscriber. Seriously.",
+    "The email platform that charges flat, not per contact",
+  ],
+  affiliate: [
+    "Earn 30% commission every time you refer someone to MessengerPanda 🐼",
+    "Your referral toolkit (copy-paste ready)",
+    "How much have you earned from your referrals?",
+    "5 types of people in your network who need this",
+    "Your affiliate dashboard just got an update",
+    "The easiest pitch for your email marketing audience",
+    "You referred [N] people this month — here's your earnings",
+  ]
+};
+
+function renderSubjects() {
+  ['welcome', 'sales', 'affiliate'].forEach(cat => {
+    const el = document.getElementById(`subj-${cat}`);
+    const tagClass = cat === 'welcome' ? 'tag-welcome' : cat === 'sales' ? 'tag-sales' : 'tag-affiliate';
+    const tagLabel = cat === 'welcome' ? 'Welcome' : cat === 'sales' ? 'Sales' : 'Affiliate';
+    el.innerHTML = subjects[cat].map((s, i) => `
+      <div class="subj-item" style="cursor: pointer;" onclick="copySubject(this, '${s.replace(/'/g, "\\'")}')" title="Click to copy">
+        <span class="subj-text">${s}</span>
+        <span class="subj-tag ${tagClass}">${tagLabel}</span>
+      </div>
+    `).join('');
+  });
+}
+
+function copySubject(el, text) {
+  navigator.clipboard.writeText(text).catch(() => {});
+  el.style.background = '#F0FDF4';
+  el.style.borderColor = '#BBF7D0';
+  const span = el.querySelector('.subj-text');
+  const original = span.textContent;
+  span.textContent = '✓ Copied!';
+  setTimeout(() => { el.style.background = ''; el.style.borderColor = ''; span.textContent = original; }, 1500);
+}
+
+// ─── CHECKLIST ───
+const checklistItems = [
+  { label: 'Sign up for a MessengerPanda account', sub: 'Start free at messengerpanda.app — no credit card required' },
+  { label: 'Join the Affiliate Program', sub: 'Go to Account → Affiliate Program to get your referral link' },
+  { label: 'Copy your unique referral link', sub: 'Found in your affiliate dashboard' },
+  { label: 'Connect your SMTP account', sub: 'Try Brevo free tier — 300 emails/day at $0' },
+  { label: 'Send your first campaign', sub: 'Experience the product yourself before promoting it' },
+  { label: 'Identify 10 people in your network who could benefit', sub: 'E-commerce, coaches, agencies, newsletter operators' },
+  { label: 'Post your first LinkedIn share', sub: 'Use the "Savings Post" template from the Copy Templates tab' },
+  { label: 'Send the WhatsApp/DM message to 5 contacts', sub: 'Personal outreach converts better than mass posts' },
+  { label: 'Post or reply in one Reddit thread', sub: 'r/SaaS, r/Entrepreneur, or r/EmailMarketing work well' },
+  { label: 'Add a newsletter mention if you have one', sub: 'Even a 2-sentence mention can drive quality referrals' },
+  { label: 'Check your affiliate dashboard after 7 days', sub: 'Track clicks, signups, and conversions' },
+  { label: 'Schedule a second round of sharing in 2 weeks', sub: 'Consistency is how affiliate income compounds' },
+];
+
+function renderChecklist() {
+  const el = document.getElementById('checklist-items');
+  el.innerHTML = checklistItems.map((item, i) => `
+    <div class="check-item" id="check-${i}" onclick="toggleCheck(${i})">
+      <div class="check-box" id="box-${i}"></div>
+      <div>
+        <div class="check-label">${item.label}</div>
+        <div class="check-sub">${item.sub}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+const checked = new Set();
+function toggleCheck(i) {
+  const item = document.getElementById(`check-${i}`);
+  if (checked.has(i)) { checked.delete(i); item.classList.remove('done'); }
+  else { checked.add(i); item.classList.add('done'); }
+  const pct = Math.round((checked.size / checklistItems.length) * 100);
+  document.getElementById('progress-bar').style.width = pct + '%';
+  document.getElementById('progress-label').textContent = `${checked.size} of ${checklistItems.length} tasks complete`;
+}
+
+// ─── FAQ ───
+const faqs = [
+  {
+    q: "Do I need a paid MessengerPanda plan to be an affiliate?",
+    a: "No. You can join the affiliate program on the free plan. However, we recommend experiencing the product yourself — people who genuinely use what they promote convert much better. At minimum, sign up, connect an SMTP, and send a test campaign."
+  },
+  {
+    q: "Is the 30% commission one-time or recurring?",
+    a: "The commission is one-time per referred customer (paid on their first payment). This means your earnings depend on consistently bringing in new referrals rather than passively accumulating from a recurring stream. The upside: there's no minimum payout period to wait for."
+  },
+  {
+    q: "What if someone signs up for free and upgrades later?",
+    a: "Commission is paid when a referred user makes a payment. If they upgrade from free to Pro, your commission is triggered at that point. This is why driving free signups still has value — free users often convert to paid within 30–90 days."
+  },
+  {
+    q: "\"What is SMTP and why do I need my own?\"",
+    a: "SMTP (Simple Mail Transfer Protocol) is the technology that actually sends emails. Platforms like Mailchimp bundle SMTP into their pricing — which is why they charge more as your list grows. MessengerPanda separates the two: you pay MessengerPanda for the platform, and you connect a separate SMTP provider (like Brevo, AWS SES, or Resend) for the actual sending. This gives you lower costs and more control over your deliverability."
+  },
+  {
+    q: "\"Is it complicated to set up?\"",
+    a: "No. The fastest setup (using Brevo's free tier) takes under 2 minutes: create a Brevo account, generate an SMTP key, paste it into MessengerPanda. Full step-by-step guides are in the documentation at docs.messengerpanda.app. If someone gets stuck, they can email support@messengerpanda.app."
+  },
+  {
+    q: "\"How is this different from Mailchimp?\"",
+    a: "Two main differences: (1) Pricing model — MessengerPanda charges flat-rate, Mailchimp charges per subscriber. At 10k contacts, MessengerPanda Pro + Brevo is $44/mo vs. Mailchimp's $135/mo. (2) Infrastructure — MessengerPanda is a BYOS (Bring Your Own SMTP) platform, meaning you control your sending infrastructure and can switch providers anytime without losing your data."
+  },
+  {
+    q: "\"What if I'm not technical?\"",
+    a: "You don't need to be technical. The SMTP setup is guided step-by-step in the documentation. If someone follows the Brevo guide, they're set up in under 5 minutes. MessengerPanda is designed for marketers, not developers."
+  },
+  {
+    q: "\"Is there a Nigerian Naira billing option?\"",
+    a: "Yes. This is a major differentiator for the African market. Pro is ₦15,000/mo and Business is ₦40,000/mo, both billed via Paystack. No USD credit card required for Nigerian users."
+  },
+  {
+    q: "How do I track my referrals?",
+    a: "Your affiliate dashboard (inside your MessengerPanda account) shows real-time data on clicks, signups, and conversions attributed to your referral link. Check it weekly to see what's working."
+  },
+  {
+    q: "What content performs best for affiliates?",
+    a: "Highest-converting in order: (1) Personal DMs and WhatsApp messages to people you know who run email marketing. (2) LinkedIn posts with the savings comparison ($135/mo vs $44/mo). (3) Reddit replies in threads where people are asking about email marketing cost. (4) Newsletter mentions. Broad social posts without a personal endorsement tend to underperform."
+  },
+];
+
+function renderFAQ() {
+  const el = document.getElementById('faq-list');
+  el.innerHTML = faqs.map((f, i) => `
+    <div class="faq-item" id="faq-${i}">
+      <div class="faq-q" onclick="toggleFAQ(${i})">
+        <span>${f.q}</span>
+        <span class="faq-chevron">▾</span>
+      </div>
+      <div class="faq-a">${f.a}</div>
+    </div>
+  `).join('');
+}
+
+function toggleFAQ(i) {
+  const item = document.getElementById(`faq-${i}`);
+  item.classList.toggle('open');
+}
+
+// ─── INIT ───
+renderCopyTemplates();
+renderSubjects();
+renderChecklist();
+renderFAQ();
+</script>
+</body>
+</html>
